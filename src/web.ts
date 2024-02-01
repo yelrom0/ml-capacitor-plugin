@@ -7,4 +7,8 @@ export class CapTorchWeb extends WebPlugin implements CapTorchPlugin {
     console.log('ECHO', options);
     return options;
   }
+
+  async loadImage(options: { imagePath: string}): Promise<void> {
+    console.log('loadImage', options);
+  }
 }
