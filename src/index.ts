@@ -6,5 +6,5 @@ const CapTorch = registerPlugin<CapTorchPlugin>('CapTorch', {
   web: () => import('./web').then(m => new m.CapTorchWeb()),
 });
 
-export * from './definitions';
+export type {CapTorchPlugin} from './definitions';
 export { CapTorch };
