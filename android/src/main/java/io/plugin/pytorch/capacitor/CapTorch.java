@@ -41,6 +41,7 @@ public class CapTorch {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        registerPlugin(EchoPlugin.class);
         super.onCreate(savedInstanceState);
         // Add any application logic here. This is called when the app
         // is loaded and the plugin starts up.

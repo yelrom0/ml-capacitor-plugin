@@ -14,7 +14,21 @@
     "pretty": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "skipLibCheck": true,
+    "types": ["node"]
   },
-  "files": ["src/index.ts"]
+  "baseUrl": "./src",
+  "paths": {
+    "~/*": ["*"]
+  },
+  "include": [
+    "src/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "./node_modules",
+    "./node_modules/*",
+    "./node_modules/@types/node/index.d.ts",
+  ]
 }

@@ -15,7 +15,8 @@ npx cap sync
 
 <docgen-index>
 
-- [`echo(...)`](#echo)
+* [`echo(...)`](#echo)
+* [`loadImage()`](#loadimage)
 
 </docgen-index>
 
@@ -34,6 +35,17 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
----
+--------------------
+
+
+### loadImage()
+
+```typescript
+loadImage() => Promise<{ imageStr: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ imageStr: string; }&gt;</code>
+
+--------------------
 
 </docgen-api>
