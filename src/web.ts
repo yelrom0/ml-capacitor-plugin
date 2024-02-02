@@ -8,7 +8,15 @@ export class CapTorchWeb extends WebPlugin implements CapTorchPlugin {
     return options;
   }
 
-  async loadImage(options: { imagePath: string}): Promise<void> {
-    console.log('loadImage', options);
+  async loadImage(): Promise<{imageStr: string}> {
+    console.log('loadImage');
+    let returnVal = '';
+    const listener = (e: any) => {
+      console.log(`imagePickResult ${JSON.stringify(e)}`);
+      returnVal = e;
+    };
+    addEventListener('imagePickResult', listener);
+    removeEventListener('imagePickResult', listener);
+    return {imageStr: returnVal};
   }
 }

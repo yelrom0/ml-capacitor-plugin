@@ -62,10 +62,15 @@ public class CapTorch {
         return value;
     }
 
-    public void loadImage(String imagePath) {
-        const file = await Filesystem.readFile({
-            path: imagePath
-        });
-        Bitmap image = BitmapFactory.decodeFile(file);
+    public void loadImage() {
+        // open the file picker to select any single image then return
+        // a base64 string of the image
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.EXTRA_ALLOW_MULTIPLE = false;
+        ResolveInfo info = resolveActivity(intent, default);
+        startActivityForResult(intent, "imagePickResult");
     }
+
+    
 }
