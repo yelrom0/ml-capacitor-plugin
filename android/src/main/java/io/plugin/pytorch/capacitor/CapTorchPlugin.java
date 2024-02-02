@@ -12,6 +12,7 @@ public class CapTorchPlugin extends Plugin {
 
     private CapTorch implementation = new CapTorch();
 
+
     @Override
     protected void load() {
         super.load();
@@ -29,18 +30,30 @@ public class CapTorchPlugin extends Plugin {
     }
 
     @PluginMethod
-    public String loadImage(PluginCall call) {
+    public void loadImage(PluginCall call) {
         implementation.loadImage();
         // call.resolve(ret);
+    }
+
+    private void imagePickFailed() {
+        JSObject ret = new JSObject();
+        ret.put("name", "");
+        ret.put("data", "");
+        ret.put("mimeType", "");
+        notifyListeners("imagePickResult", ret);
     }
 
     @ActivityCallback
     protected void imagePickResult(ActivityResult result) {
         if (call == null) {
+            imagePickFailed();
             return;
         }
 
         if (result.getResultCode() == RESULT_OK) {
+            // create the return object
+            JSObject ret = new JSObject();
+
             Uri selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -50,22 +63,29 @@ public class CapTorchPlugin extends Plugin {
             cursor.close();
 
             // Load the image
-            this.image = BitmapFactory.decodeFile(imagePath);
+            implementation.image = BitmapFactory.decodeFile(imagePath);
+            JSObject ret = new JSObject();
 
-            // Write the image to a parcel
-            Parcel parcel = Parcel.obtain();
-            this.image.writeToParcel(parcel, 0);
-            Byte[] bArr = parcel.createByteArray();
-            String imageString = Base64.encodeToString(bArr, Base64.DEFAULT);
+            // convert to webp
+            OutputStream baos = new ByteArrayOutputStream(imagePath);
+            boolean succeeded = implementation.image.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, baos);
+            if (!succeeded) {
+                Log.e("CapTorch", "Failed to convert image to webp");
+                imagePickFailed();
+                return;
+            }
+
+            // convert the image to a base64 string
+            ByteArray imageByteArray = baos.toByteArray();
+            String imageString = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
 
             // Return the image
-            JSObject ret = new JSObject();
-            ret.put("image", imageString);
+            ret.put("name", imagePath);
+            ret.put("data", imageString);
+            ret.put("mimeType", "image/webp");
             notifyListeners("imagePickResult", ret);
         }
         // Return a blank string
-        JSObject ret = new JSObject();
-        ret.put("image", "");
-        notifyListeners("imagePickResult", ret);
+        imagePickFailed();
     }
 }
