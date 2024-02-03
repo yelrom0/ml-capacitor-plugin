@@ -16,7 +16,7 @@ export class CapTorchWeb extends WebPlugin implements CapTorchPlugin {
       returnVal = e;
     };
     addEventListener('imagePickResult', listener);
-    removeEventListener('imagePickResult', listener);
+  
     return {image: returnVal};
   }
 }

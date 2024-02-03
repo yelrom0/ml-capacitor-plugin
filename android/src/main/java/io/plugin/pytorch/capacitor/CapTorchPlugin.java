@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
 import android.util.Base64;
+import android.util.Log;
 import androidx.activity.result.ActivityResult;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -46,17 +47,19 @@ public class CapTorchPlugin extends Plugin {
 
     @PluginMethod
     public void loadImage(PluginCall call) {
-        // implementation.loadImage();
-        // call.resolve(ret);
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
-        // // intent.EXTRA_ALLOW_MULTIPLE = false;
-        // ResolveInfo info = resolveActivity(intent, "imagePickResult");
+
+        // store the call to be reused
+        call.setKeepAlive(true);
+
+        // activate the picker which should activate the callback
         startActivityForResult(call, intent, "imagePickResult");
     }
 
-    private void imagePickFailed(PluginCall call) {
+    private void imagePickFailed(PluginCall call, String errMsg) {
+        Log.e("Image Loading", errMsg);
         JSObject ret = new JSObject();
         ret.put("name", "");
         ret.put("data", "");
@@ -66,9 +69,10 @@ public class CapTorchPlugin extends Plugin {
 
     @ActivityCallback
     protected void imagePickResult(PluginCall call, ActivityResult result) {
+        Log.i("Image Loading", "In Callback");
         // check that all is good
         if (call == null || result.getResultCode() != Activity.RESULT_OK) {
-            imagePickFailed(call);
+            imagePickFailed(call, "call was null or result was not okay");
         }
 
         // some prep
@@ -92,11 +96,12 @@ public class CapTorchPlugin extends Plugin {
             ret.put("name", url.getPath());
             ret.put("data", imgString);
             ret.put("mimeType", "image/webp");
+            Log.i("Image Loading", "About to return from callback");
             call.resolve(ret);
         } catch (FileNotFoundException e) {
-            imagePickFailed(call);
+            imagePickFailed(call, "FileNotFoundException" + e.getMessage());
         } catch (IOException e) {
-            imagePickFailed(call);
+            imagePickFailed(call, "FileNotFoundException" + e.getMessage());
         }
     }
 }
