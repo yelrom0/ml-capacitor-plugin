@@ -1,24 +1,39 @@
 package io.plugin.pytorch.capacitor;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore.Images;
+import android.util.Base64;
+import androidx.activity.result.ActivityResult;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-
-@CapacitorPlugin(name = "CapTorch", permissions = { @Permission(alias = "storage"), strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE } }
+@CapacitorPlugin(name = "CapTorch")
 public class CapTorchPlugin extends Plugin {
 
     private CapTorch implementation = new CapTorch();
 
-
-    @Override
-    protected void load() {
-        super.load();
-        // Add any application logic here. This is called when the app
-        // is loaded and the plugin starts up.
-    }
+    // @Override
+    // protected void load() {
+    //     super.load();
+    //     // Add any application logic here. This is called when the app
+    //     // is loaded and the plugin starts up.
+    // }
 
     @PluginMethod
     public void echo(PluginCall call) {
@@ -31,61 +46,57 @@ public class CapTorchPlugin extends Plugin {
 
     @PluginMethod
     public void loadImage(PluginCall call) {
-        implementation.loadImage();
+        // implementation.loadImage();
         // call.resolve(ret);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        // // intent.EXTRA_ALLOW_MULTIPLE = false;
+        // ResolveInfo info = resolveActivity(intent, "imagePickResult");
+        startActivityForResult(call, intent, "imagePickResult");
     }
 
-    private void imagePickFailed() {
+    private void imagePickFailed(PluginCall call) {
         JSObject ret = new JSObject();
         ret.put("name", "");
         ret.put("data", "");
         ret.put("mimeType", "");
-        notifyListeners("imagePickResult", ret);
+        call.resolve(ret);
     }
 
     @ActivityCallback
-    protected void imagePickResult(ActivityResult result) {
-        if (call == null) {
-            imagePickFailed();
-            return;
+    protected void imagePickResult(PluginCall call, ActivityResult result) {
+        // check that all is good
+        if (call == null || result.getResultCode() != Activity.RESULT_OK) {
+            imagePickFailed(call);
         }
 
-        if (result.getResultCode() == RESULT_OK) {
-            // create the return object
+        // some prep
+        Intent intent = result.getData();
+        Uri url = intent.getData();
+        Context content = getContext();
+
+        // load ze image
+        try {
+            Bitmap bitmap = Images.Media.getBitmap(content.getContentResolver(), url);
+
+            // convert image to webp
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, out);
+            byte[] imageBytes = out.toByteArray();
+            out.close();
+            String imgString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+            // send data to frontend
             JSObject ret = new JSObject();
-
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imagePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            // Load the image
-            implementation.image = BitmapFactory.decodeFile(imagePath);
-            JSObject ret = new JSObject();
-
-            // convert to webp
-            OutputStream baos = new ByteArrayOutputStream(imagePath);
-            boolean succeeded = implementation.image.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, baos);
-            if (!succeeded) {
-                Log.e("CapTorch", "Failed to convert image to webp");
-                imagePickFailed();
-                return;
-            }
-
-            // convert the image to a base64 string
-            ByteArray imageByteArray = baos.toByteArray();
-            String imageString = Base64.encodeToString(imageByteArray, Base64.DEFAULT);
-
-            // Return the image
-            ret.put("name", imagePath);
-            ret.put("data", imageString);
+            ret.put("name", url.getPath());
+            ret.put("data", imgString);
             ret.put("mimeType", "image/webp");
-            notifyListeners("imagePickResult", ret);
+            call.resolve(ret);
+        } catch (FileNotFoundException e) {
+            imagePickFailed(call);
+        } catch (IOException e) {
+            imagePickFailed(call);
         }
-        // Return a blank string
-        imagePickFailed();
     }
 }
