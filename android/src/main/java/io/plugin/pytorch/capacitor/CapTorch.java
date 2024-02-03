@@ -1071,9 +1071,9 @@ public class CapTorch {
         Module model = null;
         // loading serialized torchscript module from packaged into app
         // android asset mobilenet-v3-model.pt
-        // app/src/main/assets/model.pt
+        // app/src/main/assets/mobilenet-v3-model.pt
         try {
-            model = LiteModuleLoader.load(assetFilePath(content, "model.pt"));
+            model = LiteModuleLoader.load(assetFilePath(content, "mobilenet-v3-model.pt"));
         } catch (IOException e) {
             imageProcessingFailed(call, "ImageAI", "Error loading model");
         }
