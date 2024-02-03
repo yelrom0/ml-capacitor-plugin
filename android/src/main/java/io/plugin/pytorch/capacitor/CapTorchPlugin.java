@@ -67,6 +67,7 @@ public class CapTorchPlugin extends Plugin {
             return;
         } else if (result.getResultCode() != Activity.RESULT_OK) {
             implementation.imageProcessingFailed(call, "ImageLoading", "result was not okay");
+            return;
         }
 
         // some prep
@@ -94,7 +95,8 @@ public class CapTorchPlugin extends Plugin {
             Log.i("ImageLoading", "name: " + imgPath);
             Log.i("ImageLoading", "data: " + imgString);
             call.resolve(ret);
-            Log.i("ImageLoading", "Returned from callback");
+            Log.i("ImageLoading", "Calling AI model");
+            implementation.runTorchBitmapClassify(call, bitmap, content);
         } catch (FileNotFoundException e) {
             implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
         } catch (NullPointerException e) {
@@ -102,6 +104,5 @@ public class CapTorchPlugin extends Plugin {
         } catch (IOException e) {
             implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
         }
-        implementation.runTorchBitmapClassify(call, bitmap, content);
     }
 }
