@@ -86,12 +86,14 @@ public class CapTorchPlugin extends Plugin {
 
             // send data to frontend
             JSObject ret = new JSObject();
-            ret.put("name", url.getPath());
+            String imgPath = url.getPath();
+            ret.put("name", imgPath);
             ret.put("data", imgString);
             ret.put("mimeType", "image/webp");
             Log.i("ImageLoading", "About to return from callback");
-            Log.i("ImageLoading", "name: " + url.getPath());
+            Log.i("ImageLoading", "name: " + imgPath);
             call.resolve(ret);
+            Log.i("ImageLoading", "Returned from callback");
         } catch (FileNotFoundException e) {
             implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
         } catch (NullPointerException e) {
