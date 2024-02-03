@@ -92,6 +92,7 @@ public class CapTorchPlugin extends Plugin {
             ret.put("mimeType", "image/webp");
             Log.i("ImageLoading", "About to return from callback");
             Log.i("ImageLoading", "name: " + imgPath);
+            Log.i("ImageLoading", "data: " + imgString);
             call.resolve(ret);
             Log.i("ImageLoading", "Returned from callback");
         } catch (FileNotFoundException e) {
