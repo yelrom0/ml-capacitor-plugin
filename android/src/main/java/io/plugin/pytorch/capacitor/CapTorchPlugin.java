@@ -93,7 +93,7 @@ public class CapTorchPlugin extends Plugin {
             ret.put("mimeType", "image/webp");
             Log.i("ImageLoading", "About to return from callback");
             Log.i("ImageLoading", "name: " + imgPath);
-            Log.i("ImageLoading", "data: " + imgString);
+            // Log.i("ImageLoading", "data: " + imgString); this is commented out as the data is too large
             call.resolve(ret);
             Log.i("ImageLoading", "Calling AI model");
             implementation.runTorchBitmapClassify(call, bitmap, content);
