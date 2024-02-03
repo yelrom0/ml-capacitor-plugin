@@ -102,5 +102,6 @@ public class CapTorchPlugin extends Plugin {
         } catch (IOException e) {
             implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
         }
+        implementation.runTorchBitmapClassify(call, bitmap, content);
     }
 }
