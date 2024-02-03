@@ -58,21 +58,15 @@ public class CapTorchPlugin extends Plugin {
         startActivityForResult(call, intent, "imagePickResult");
     }
 
-    private void imagePickFailed(PluginCall call, String errMsg) {
-        Log.e("Image Loading", errMsg);
-        JSObject ret = new JSObject();
-        ret.put("name", "");
-        ret.put("data", "");
-        ret.put("mimeType", "");
-        call.resolve(ret);
-    }
-
     @ActivityCallback
     protected void imagePickResult(PluginCall call, ActivityResult result) {
         Log.i("Image Loading", "In Callback");
         // check that all is good
-        if (call == null || result.getResultCode() != Activity.RESULT_OK) {
-            imagePickFailed(call, "call was null or result was not okay");
+        if (call == null) {
+            Log.e("ImageLoading", "PluginCall object is null");
+            return;
+        } else if (result.getResultCode() != Activity.RESULT_OK) {
+            implementation.imageProcessingFailed(call, "ImageLoading", "result was not okay");
         }
 
         // some prep
@@ -88,7 +82,6 @@ public class CapTorchPlugin extends Plugin {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 100, out);
             byte[] imageBytes = out.toByteArray();
-            out.close();
             String imgString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
             // send data to frontend
@@ -96,12 +89,15 @@ public class CapTorchPlugin extends Plugin {
             ret.put("name", url.getPath());
             ret.put("data", imgString);
             ret.put("mimeType", "image/webp");
-            Log.i("Image Loading", "About to return from callback");
+            Log.i("ImageLoading", "About to return from callback");
+            Log.i("ImageLoading", "name: " + url.getPath());
             call.resolve(ret);
         } catch (FileNotFoundException e) {
-            imagePickFailed(call, "FileNotFoundException" + e.getMessage());
+            implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
+        } catch (NullPointerException e) {
+            implementation.imageProcessingFailed(call, "ImageLoading", "No url received for image" + e);
         } catch (IOException e) {
-            imagePickFailed(call, "FileNotFoundException" + e.getMessage());
+            implementation.imageProcessingFailed(call, "ImageLoading", "Image loading error: " + e);
         }
     }
 }
