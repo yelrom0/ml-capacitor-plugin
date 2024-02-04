@@ -9,7 +9,10 @@ export interface ImageData {
   mimeType: string;
 }
 
-export type ImageResponseType = 'image' | 'ai';
+export enum ImageResponseType { 
+  image = 'image',
+  ai = 'ai'
+};
 
 export interface ImageResponse {
   id: string;
@@ -17,7 +20,7 @@ export interface ImageResponse {
   data: ImageData | ImageAIData;
 }
 
-export type CallbackID = string;
+export type CallbackID = string | undefined;
 
 export type ImageResponseCallback = (response: ImageResponse) => void;
 export interface CapTorchPlugin {

@@ -45,7 +45,7 @@ public class CapTorchPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod
+    @PluginMethod(returnType = PluginMethod.RETURN_CALLBACK)
     public void loadImage(PluginCall call) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
         intent.setType("image/*");
@@ -86,11 +86,16 @@ public class CapTorchPlugin extends Plugin {
             String imgString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
             // send data to frontend
-            JSObject ret = new JSObject();
             String imgPath = url.getPath();
-            ret.put("name", imgPath);
-            ret.put("data", imgString);
-            ret.put("mimeType", "image/webp");
+            JSObject data = new JSObject();
+            data.put("name", imgPath);
+            data.put("data", imgString);
+            data.put("mimeType", "image/webp");
+
+            JSObject ret = new JSObject();
+            ret.put("id", imgPath);
+            ret.put("type", "image");
+            ret.put("data", data);
             Log.i("ImageLoading", "About to return from callback");
             Log.i("ImageLoading", "name: " + imgPath);
             // Log.i("ImageLoading", "data: " + imgString); this is commented out as the data is too large

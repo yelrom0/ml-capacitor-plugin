@@ -1109,9 +1109,13 @@ public class CapTorch {
             Log.i("ImageAI", logStr);
 
             // send data to frontend
+            JSObject data = new JSObject();
+            data.put("className", className);
+            data.put("confidence", maxScore);
             JSObject ret = new JSObject();
-            ret.put("className", className);
-            ret.put("confidence", maxScore);
+            ret.put("id", "ImageAI");
+            ret.put("type", "ai");
+            ret.put("data", data);
             call.resolve(ret);
         } catch (NullPointerException e) {
             imageProcessingFailed(call, "ImageAI", "Error running the model: " + e);
