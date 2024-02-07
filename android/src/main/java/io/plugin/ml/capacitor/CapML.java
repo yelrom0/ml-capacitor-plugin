@@ -1,4 +1,4 @@
-package io.plugin.pytorch.capacitor;
+package io.plugin.ml.capacitor;
 
 import android.content.Context;
 import android.graphics.Bitmap;

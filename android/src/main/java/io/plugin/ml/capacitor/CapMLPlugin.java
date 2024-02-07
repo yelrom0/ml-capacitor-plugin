@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-@CapacitorPlugin(name = "CapTorch")
+@CapacitorPlugin(name = "CapML")
 public class CapMLPlugin extends Plugin {
 
     private CapML implementation = new CapML();

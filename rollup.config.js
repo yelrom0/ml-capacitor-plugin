@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorCapTorch',
+      name: 'capacitorCapML',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },

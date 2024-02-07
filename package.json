@@ -1,7 +1,7 @@
 {
-  "name": "pytorch-capacitor-plugin",
+  "name": "ml-capacitor-plugin",
   "version": "0.0.1",
-  "description": "PyTorch Mobile Plugin for Capacitor",
+  "description": "ML Mobile Plugin for Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "PytorchCapacitorPlugin.podspec"
+    "MLCapacitorPlugin.podspec"
   ],
   "author": "yelrom0",
   "license": "MIT",

@@ -1,6 +1,6 @@
 import Foundation
 
-@objc public class CapTorch: NSObject {
+@objc public class CapML: NSObject {
     @objc public func echo(_ value: String) -> String {
         print(value)
         return value
