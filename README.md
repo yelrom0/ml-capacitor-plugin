@@ -1,13 +1,13 @@
-# pytorch-capacitor-plugin
+# ml-capacitor-plugin
 
-PyTorch Mobile Plugin for Capacitor
+Machine Learning Mobile Plugin for Capacitor using Pytorch and/or Tensorflow
 
 Don't install this plugin yet. It's still in early development.
 
 ## Install
 
 ```bash
-npm install pytorch-capacitor-plugin
+npm install ml-capacitor-plugin
 npx cap sync
 ```
 
@@ -15,8 +15,8 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
-* [`loadImage()`](#loadimage)
+- [`echo(...)`](#echo)
+- [`loadImage()`](#loadimage)
 
 </docgen-index>
 
@@ -35,8 +35,7 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
---------------------
-
+---
 
 ### loadImage()
 
@@ -46,6 +45,6 @@ loadImage() => Promise<{ imageStr: string; }>
 
 **Returns:** <code>Promise&lt;{ imageStr: string; }&gt;</code>
 
---------------------
+---
 
 </docgen-api>

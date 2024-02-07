@@ -1,10 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { CapTorchPlugin } from './definitions';
+import type { CapMLPlugin } from './definitions';
 
-const CapTorch = registerPlugin<CapTorchPlugin>('CapTorch', {
-  web: () => import('./web').then(m => new m.CapTorchWeb()),
+const CapML = registerPlugin<CapMLPlugin>('CapML', {
+  web: () => import('./web').then(m => new m.CapMLWeb()),
 });
 
-export type {CapTorchPlugin} from './definitions';
-export { CapTorch };
+export type {CapMLPlugin} from './definitions';
+export { CapML };

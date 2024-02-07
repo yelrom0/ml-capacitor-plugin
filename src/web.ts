@@ -1,9 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
 
 import {ImageResponseType} from './definitions';
-import type { CapTorchPlugin, ImageResponseCallback, CallbackID } from './definitions';
+import type { CapMLPlugin, ImageResponseCallback, CallbackID } from './definitions';
 
-export class CapTorchWeb extends WebPlugin implements CapTorchPlugin {
+export class CapMLWeb extends WebPlugin implements CapMLPlugin {
   async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;

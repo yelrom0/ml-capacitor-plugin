@@ -23,7 +23,7 @@ export interface ImageResponse {
 export type CallbackID = string | undefined;
 
 export type ImageResponseCallback = (response: ImageResponse) => void;
-export interface CapTorchPlugin {
+export interface CapMLPlugin {
   echo(options: { value: string }): Promise<{ value: string }>;
   loadImage(callback: ImageResponseCallback): Promise<CallbackID>;
 }

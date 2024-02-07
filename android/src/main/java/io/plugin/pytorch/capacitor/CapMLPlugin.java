@@ -1,4 +1,4 @@
-package io.plugin.pytorch.capacitor;
+package io.plugin.ml.capacitor;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @CapacitorPlugin(name = "CapTorch")
-public class CapTorchPlugin extends Plugin {
+public class CapMLPlugin extends Plugin {
 
-    private CapTorch implementation = new CapTorch();
+    private CapML implementation = new CapML();
 
     // @Override
     // protected void load() {

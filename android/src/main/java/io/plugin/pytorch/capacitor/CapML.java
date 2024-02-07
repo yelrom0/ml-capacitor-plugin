@@ -18,7 +18,7 @@ import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
-public class CapTorch {
+public class CapML {
 
     public String echo(String value) {
         Log.i("Echo", value);
